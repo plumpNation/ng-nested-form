@@ -3,13 +3,12 @@
 
     angular.module('nestedFormTest', [])
         .run(function () {
-            console.log('formTest module running');
+            console.log('`nestedFormTest` module running');
         })
         .controller('MainCtrl', MainController)
-        .directive('formComponent', function () {
+        .directive('rangeComponent', function RangeComponentDirective() {
             return {
                 restrict: 'AE',
-                require: '^ngModel',
 
                 scope: {
                     ngModel: '='
@@ -18,31 +17,42 @@
                 controllerAs: 'fcvm',
                 bindToController: true,
 
-                template: '<div ng-form="fcvm.nestedForm">' +
-                    '<input type="range" min="0" max="10" name="lo" ng-model="fcvm.ngModel.lo" >' +
-                    '<p>{{fcvm.ngModel.lo}}</p>' +
-                    '<input type="range" min="0" max="10" name="hi" ng-model="fcvm.ngModel.hi" >' +
-                    '<p>{{fcvm.ngModel.hi}}</p>' +
-                '</div>',
+                template: [
+                    '<div ng-form="fcvm.nestedForm" class="nested-form">',
+                        '<label for="lo">Lo: {{fcvm.ngModel.lo}}</label>',
+                        '<input id="lo" type="range" min="0" max="10" name="lo"',
+                            'ng-model="fcvm.ngModel.lo" >',
 
-                controller: FormComponentController
+                        '<label for="hi">Hi: {{fcvm.ngModel.hi}}</label>',
+                        '<input id="hi" type="range" min="0" max="10" name="hi"',
+                            'ng-model="fcvm.ngModel.hi" >',
+                    '</div>'
+                ].join(' '),
+
+                controller: RangeComponentController
             };
         });
 
-    function FormComponentController($scope, $timeout) {
+    function RangeComponentController($scope, $timeout) {
         var self = this,
 
-            validateRange = function (val) {
-                var isValid = true;;
+            LO_IS_MORE = 'loIsMore',
 
+            validateRange = function (val) {
                 if (!val) {
                     return;
                 }
 
                 // this is valid
-                isValid = self.ngModel.lo < self.ngModel.hi;
+                if (self.ngModel.lo >= self.ngModel.hi) {
+                    console.warn('Setting invalidity of form component');
+                    self.nestedForm.$setValidity(LO_IS_MORE, false);
+                    return;
 
-                self.nestedForm.$setValidity('LO_IS_MORE', self.ngModel.lo < self.ngModel.hi);
+                } else {
+                    console.log('Setting validity of form component');
+                    self.nestedForm.$setValidity(LO_IS_MORE, true);
+                }
             };
 
         $timeout(function () {
@@ -56,9 +66,43 @@
     function MainController($scope, $timeout) {
         var self = this;
 
-        console.log('controller running');
+        console.info('controller running');
 
-        self.range = {'lo': 0, 'hi': 2};
+        self.requiredText = 'Delete this to see required';
+
+        self.range1 = {
+            'lo': 0,
+            'hi': 5
+        };
+
+        self.range2 = {
+            'lo': 0,
+            'hi': 5
+        };
+
+        self.range3 = {
+            'lo': 0,
+            'hi': 5
+        };
+
+        self.range4 = {
+            'lo': 0,
+            'hi': 5
+        };
+
+        self.range5 = {
+            'lo': 0,
+            'hi': 5
+        };
+
+        self.onSubmit = function () {
+            if (self.rootForm.$valid) {
+                console.log('Submitting form');
+                return;
+            }
+
+            alert('No way man! Clear up your mess first!');
+        };
 
         $timeout(function () {
             // form only available after digest is run
@@ -70,10 +114,11 @@
 
         }, function (isNowValid) {
             if (isNowValid) {
-                console.info(self.rootForm.$name, 'has become valid');
+                console.log(self.rootForm.$name, 'has become valid');
+                return;
             }
 
-            console.info(
+            console.warn(
                 self.rootForm.$name,
                 'has become invalid with message',
                 self.rootForm.$error

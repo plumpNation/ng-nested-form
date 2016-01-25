@@ -5,6 +5,9 @@ body {
 #main-form {
     border: 1px solid lightgrey;
     display: inline-block;
-    margin-top: 2rem;
     padding: 2rem;
+}
+
+.ng-invalid {
+    border: 1px solid red;
 }

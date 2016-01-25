@@ -7,13 +7,28 @@
         <script src="main.js"></script>
         <link rel="stylesheet" href="styles.css">
     </head>
+
     <body ng-controller="MainCtrl as main">
-        <form name="main.rootForm" id="main-form">
+
+        <h1>Nested form validation</h1>
+
+        <p>When this form is invalid, it will have a red border</p>
+        <form name="main.rootForm" ng-submit="main.onSubmit()" id="main-form">
+
+            <p>First, a required input using ng-required="true" in the root form</p>
+            <input name="requiredText" ng-model="main.requiredText" ng-required="true">
+
             <p>
-                Below is a nested form component with it's own custom validation.
+                Below is a few nested range components with internal custom validation.
                 It is valid when the <strong>hi > lo</strong>.
+                Each one will show it's own validity with a red border.
             </p>
-            <form-component ng-model="main.range"></form-component>
+
+            <range-component ng-model="main.range1"></range-component>
+            <range-component ng-model="main.range2"></range-component>
+            <range-component ng-model="main.range3"></range-component>
+            <range-component ng-model="main.range4"></range-component>
+
             <button type="submit">Submit</button>
         </form>
     </body>
