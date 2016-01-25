@@ -36,8 +36,6 @@
     function RangeComponentController($scope, $timeout) {
         var self = this,
 
-            LO_IS_MORE = 'loIsMore',
-
             validateRange = function (val) {
                 if (!val) {
                     return;
@@ -46,12 +44,12 @@
                 // this is valid
                 if (self.ngModel.lo >= self.ngModel.hi) {
                     console.warn('Setting invalidity of form component');
-                    self.nestedForm.$setValidity(LO_IS_MORE, false);
+                    self.nestedForm.$setValidity('loIsMore', false);
                     return;
 
                 } else {
                     console.log('Setting validity of form component');
-                    self.nestedForm.$setValidity(LO_IS_MORE, true);
+                    self.nestedForm.$setValidity('loIsMore', true);
                 }
             };
 
@@ -97,7 +95,7 @@
 
         self.onSubmit = function () {
             if (self.rootForm.$valid) {
-                console.log('Submitting form');
+                alert('Submitting form');
                 return;
             }
 
