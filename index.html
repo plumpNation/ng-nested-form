@@ -5,9 +5,14 @@
         <title>Form testing</title>
         <script src="bower_components/angular/angular.js"></script>
         <script src="main.js"></script>
+        <link rel="stylesheet" href="styles.css">
     </head>
     <body ng-controller="MainCtrl as main">
-        <form name="main.rootForm">
+        <form name="main.rootForm" id="main-form">
+            <p>
+                Below is a nested form component with it's own custom validation.
+                It is valid when the <strong>hi > lo</strong>.
+            </p>
             <form-component ng-model="main.range"></form-component>
             <button type="submit">Submit</button>
         </form>

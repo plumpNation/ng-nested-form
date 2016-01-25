@@ -1,0 +1,10 @@
+body {
+    text-align: center;
+}
+
+#main-form {
+    border: 1px solid lightgrey;
+    display: inline-block;
+    margin-top: 2rem;
+    padding: 2rem;
+}

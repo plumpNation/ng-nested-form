@@ -19,19 +19,39 @@
                 bindToController: true,
 
                 template: '<div ng-form="fcvm.nestedForm">' +
-                    '<input name="lo" ng-model="fcvm.ngModel.lo" >' +
-                    '<input name="hi" ng-model="fcvm.ngModel.hi" >' +
+                    '<input type="range" min="0" max="10" name="lo" ng-model="fcvm.ngModel.lo" >' +
+                    '<p>{{fcvm.ngModel.lo}}</p>' +
+                    '<input type="range" min="0" max="10" name="hi" ng-model="fcvm.ngModel.hi" >' +
+                    '<p>{{fcvm.ngModel.hi}}</p>' +
                 '</div>',
 
-                controller: function ($timeout) {
-                    var self = this;
-
-                    $timeout(function () {
-                        console.info(self.nestedForm.$name, 'available in form-component scope');
-                    });
-                }
+                controller: FormComponentController
             };
         });
+
+    function FormComponentController($scope, $timeout) {
+        var self = this,
+
+            validateRange = function (val) {
+                var isValid = true;;
+
+                if (!val) {
+                    return;
+                }
+
+                // this is valid
+                isValid = self.ngModel.lo < self.ngModel.hi;
+
+                self.nestedForm.$setValidity('LO_IS_MORE', self.ngModel.lo < self.ngModel.hi);
+            };
+
+        $timeout(function () {
+            console.info(self.nestedForm.$name, 'available in form-component scope');
+        });
+
+        $scope.$watch('fcvm.ngModel.lo', validateRange);
+        $scope.$watch('fcvm.ngModel.hi', validateRange);
+    }
 
     function MainController($scope, $timeout) {
         var self = this;
@@ -49,7 +69,15 @@
             return self.rootForm.$valid;
 
         }, function (isNowValid) {
-            console.info(self.rootForm.$name, 'has become', isNowValid ? 'valid' : 'invalid');
+            if (isNowValid) {
+                console.info(self.rootForm.$name, 'has become valid');
+            }
+
+            console.info(
+                self.rootForm.$name,
+                'has become invalid with message',
+                self.rootForm.$error
+            );
         });
     }
 }(window.angular));
