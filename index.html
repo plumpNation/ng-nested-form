@@ -5,6 +5,7 @@
         <title>Form testing</title>
         <script src="bower_components/angular/angular.js"></script>
         <script src="main.js"></script>
+        <script src="range-input-directive.js"></script>
         <link rel="stylesheet" href="styles.css">
     </head>
 
@@ -24,10 +25,10 @@
                 Each one will show it's own validity with a red border.
             </p>
 
-            <range-component ng-model="main.range1"></range-component>
-            <range-component ng-model="main.range2"></range-component>
-            <range-component ng-model="main.range3"></range-component>
-            <range-component ng-model="main.range4"></range-component>
+            <range-input ng-model="main.range1"></range-input>
+            <range-input ng-model="main.range2"></range-input>
+            <range-input ng-model="main.range3"></range-input>
+            <range-input ng-model="main.range4"></range-input>
 
             <button type="submit">Submit</button>
         </form>

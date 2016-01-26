@@ -1,65 +1,11 @@
 (function (angular) {
     'use strict';
 
-    angular.module('nestedFormTest', [])
+    angular.module('nestedFormTest', ['nestedFormTest.inputs.range'])
         .run(function () {
             console.log('`nestedFormTest` module running');
         })
-        .controller('MainCtrl', MainController)
-        .directive('rangeComponent', function RangeComponentDirective() {
-            return {
-                restrict: 'AE',
-
-                scope: {
-                    ngModel: '='
-                },
-
-                controllerAs: 'fcvm',
-                bindToController: true,
-
-                template: [
-                    '<div ng-form="fcvm.nestedForm" class="nested-form">',
-                        '<label for="lo">Lo: {{fcvm.ngModel.lo}}</label>',
-                        '<input id="lo" type="range" min="0" max="10" name="lo"',
-                            'ng-model="fcvm.ngModel.lo" >',
-
-                        '<label for="hi">Hi: {{fcvm.ngModel.hi}}</label>',
-                        '<input id="hi" type="range" min="0" max="10" name="hi"',
-                            'ng-model="fcvm.ngModel.hi" >',
-                    '</div>'
-                ].join(' '),
-
-                controller: RangeComponentController
-            };
-        });
-
-    function RangeComponentController($scope, $timeout) {
-        var self = this,
-
-            validateRange = function (val) {
-                if (!val) {
-                    return;
-                }
-
-                // this is valid
-                if (self.ngModel.lo >= self.ngModel.hi) {
-                    console.warn('Setting invalidity of form component');
-                    self.nestedForm.$setValidity('loIsMore', false);
-                    return;
-
-                } else {
-                    console.log('Setting validity of form component');
-                    self.nestedForm.$setValidity('loIsMore', true);
-                }
-            };
-
-        $timeout(function () {
-            console.info(self.nestedForm.$name, 'available in form-component scope');
-        });
-
-        $scope.$watch('fcvm.ngModel.lo', validateRange);
-        $scope.$watch('fcvm.ngModel.hi', validateRange);
-    }
+        .controller('MainCtrl', MainController);
 
     function MainController($scope, $timeout) {
         var self = this;
